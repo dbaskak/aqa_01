@@ -40,12 +40,14 @@ car_data = {
     'Nissan Titan': ('silver', 2018, 5.6, 'pickup', 35000)
 }
 search_criteria = (2017, 1.6, 36000)
+
 filtered_cars = {
     car: details for car, details in car_data.items()
     if details[1] >= search_criteria[0] and
        details[2] >= search_criteria[1] and
        details[4] <= search_criteria[2]
 }
+
 sorted_cars = sorted(filtered_cars.items(), key=lambda x: x[1][4])
 
 for i, (car, details) in enumerate(sorted_cars[:5], 1):
