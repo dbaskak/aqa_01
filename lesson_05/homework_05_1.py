@@ -52,4 +52,4 @@ sorted_cars = sorted(filtered_cars.items(), key=lambda x: x[1][4])
 
 for i, (car, details) in enumerate(sorted_cars[:5], 1):
     print(
-    f"{i}. {car}: Color: {details[0]}, Year: {details[1]}, Engine Volume: {details[2]}L, Type: {details[3]}, Price: ${details[4]}")
+    f"{i}. {car}: Color: {details[0]}, Year: {details[1]}, Engine Volume: {details[2]}L,\n Type: {details[3]}, Price: ${details[4]}")
