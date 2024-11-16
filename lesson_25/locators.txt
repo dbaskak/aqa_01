@@ -1,0 +1,55 @@
+1. XPath Locators
+
+	1.	//button[text()='Login'] - finds the button with the exact text “Login”.
+	2.	//h1[text()='Welcome to QAuto'] - finds the heading with the text “Welcome to QAuto”.
+	3.	//input[@id='email'] - selects the input field with the ID “email”.
+	4.	//input[@type='password'] - finds the input field where the type is “password”.
+	5.	//div[@class='form-group']//input[@type='password'] - finds the password input field div class “form-group”.
+	6.	//ul[@class='navbar-nav']//a[text()='Home'] - locates the “Home” link within the navigation menu.
+	7.	//a[@href='/about'] - selects the anchor tag where the href attribute points to /about.
+	8.	//form[@id='login-form'] - selects the login form by its ID.
+	9.	//div[contains(@class, 'container')] - finds any div whose class contains the word “container”.
+	10.	//label[@for='email'] - locates the label associated with the “email” input field.
+	11.	//footer//a[text()='Privacy Policy'] - finds the “Privacy Policy” link in the footer section.
+	12.	//header//nav//a[text()='Home'] - locates the “Home” link inside the header’s navigation.
+	13.	//input[@placeholder='Email'] - selects the input field with the placeholder “Email”.
+	14.	//button[contains(@class, 'btn-primary')] - finds a button with a class containing “btn-primary”.
+	15.	//div[@id='root']//h1 - locates the heading inside the div with the ID “root”.
+	16.	//a[contains(@href, '/profile')] - finds a link where the href contains /profile.
+	17.	//ul[@class='navbar-nav']//li[last()] - selects the last item in the navigation menu.
+	18.	//input[starts-with(@name, 'pass')] - finds an input field whose name starts with “pass”.
+	19.	//div[@class='form-group']//label - selects all labels inside a div with the class “form-group”.
+	20.	//header//img[@alt='Logo'] - finds the logo image with the alt text “Logo” in the header.
+	21.	//nav[@class='navbar']//a[contains(text(),'About')] - locates the “About” link in the navigation bar.
+	22.	//footer//a[contains(@href,'/contact')] - finds the “Contact” link in the footer with href containing /contact.
+	23.	//button[@type='submit' and text()='Login'] - selects the “Login” button where type is submit.
+	24.	//div[@id='error-message' and contains(text(),'Invalid email')] - finds the error  containing “Invalid email”.
+	25.	//section[@class='features']//h2 - selects the heading inside the section with the class “features”.
+
+2. CSS Locators
+
+	1.	#email - selects the input field with the ID “email”.
+	2.	#password - selects the input field with the ID “password”.
+	3.	.navbar-nav - selects the navigation menu with the class “navbar-nav”.
+	4.	ul.navbar-nav > li > a[href='/home'] - finds the “Home” link inside the navigation menu.
+	5.	div.form-group input[type="text"] - selects all text input fields inside a div with the class “form-group”.
+	6.	footer a[href='/privacy'] - finds the “Privacy Policy” link inside the footer.
+	7.	header nav a[href='/about'] - locates the “About” link inside the header’s navigation.
+	8.	form#login-form - selects the form with the ID “login-form”.
+	9.	div.container - selects a div with the class “container”.
+	10.	label[for="email"] - locates the label associated with the “email” input field.
+	11.	button.btn-primary - selects a button with the class “btn-primary”.
+	12.	div#root > h1 - locates the heading directly inside a div with the ID “root”.
+	13.	a[href*="/profile"] - finds a link where the href contains /profile.
+	14.	ul.navbar-nav > li:last-child - selects the last item in the navigation menu.
+	15.	input[name^="pass"] - finds an input field whose name starts with “pass”.
+	16.	header img[alt="Logo"] - selects the logo image in the header with the alt text “Logo”.
+	17.	nav.navbar a[href*="about"] - locates the “About” link in the navigation bar.
+	18.	footer a[href*="contact"] - finds the “Contact” link in the footer.
+	19.	button[type="submit"] - selects the button with the type “submit”.
+	20.	div#error-message:contains('Invalid email') - locates the error message containing “Invalid email”.
+	21.	section.features > h2 - finds the heading inside the section with the class “features”.
+	22.	input[placeholder="Email"] - selects the input field with the placeholder “Email”.
+	23.	div.form-group > input[type="password"] - finds the password input field inside div with the class “form-group”.
+	24.	ul.navbar-nav > li:nth-child(2) - selects the second item in the navigation menu.
+	25.	div.form-group label - selects all labels inside a div with the class “form-group”.
