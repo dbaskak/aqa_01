@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фрейм 1</title>
+</head>
+<body>
+    <h3>Frame1</h3>
+    <input type="text" id="input1" placeholder="Enter the secret text">
+    <button onclick="verifyInput('input1')">Verify</button>
+
+    <script>
+        function verifyInput(inputId) {
+            var inputValue = document.getElementById(inputId).value;
+            if (inputValue === "Frame1_Secret") {
+                alert("Verification successful!");
+            } else {
+                alert("Incorrect text entered!");
+            }
+        }
+    </script>
+</body>
+</html>
