@@ -1,12 +1,14 @@
 from flask import Flask, jsonify, request
 from database import get_db_connection
+from flask import Flask
+from config import DB_NAME
 
 app = Flask(__name__)
 
 
-@app.route('/')
+@app.route("/")
 def home():
-    return jsonify({"message": "Welcome to the Postgres Dockerized App!"})
+    return {"message": f"Connected to database {DB_NAME}!"}
 
 
 @app.route('/add', methods=['POST'])
