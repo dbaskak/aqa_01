@@ -1,3 +1,5 @@
+import pytest
+import psycopg2
 from database import get_db_connection
 
 

@@ -1,12 +1,13 @@
 import psycopg2
-import os
-
+from config import DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME
 
 def get_db_connection():
-    return psycopg2.connect(
-        dbname=os.getenv("POSTGRES_DB", "mydb"),
-        user=os.getenv("POSTGRES_USER", "user"),
-        password=os.getenv("POSTGRES_PASSWORD", "password"),
-        host=os.getenv("POSTGRES_HOST", "localhost"),
-        port=os.getenv("POSTGRES_PORT", "5432")
+    """Створення з'єднання з базою даних PostgreSQL"""
+    conn = psycopg2.connect(
+        host=DB_HOST,
+        port=DB_PORT,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        dbname=DB_NAME
     )
+    return conn
