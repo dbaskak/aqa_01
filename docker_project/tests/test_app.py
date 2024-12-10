@@ -1,4 +1,5 @@
 import pytest
+import allure
 from app import app
 
 
@@ -7,13 +8,27 @@ def client():
     return app.test_client()
 
 
+@allure.feature("API Tests")
+@allure.story("Home Endpoint")
 def test_home(client):
-    response = client.get('/')
-    assert response.status_code == 200
-    assert response.json['message'] == "Welcome to the Postgres Dockerized App!"
+    with allure.step("Send GET request to '/' endpoint"):
+        response = client.get('/')
+
+    with allure.step("Check the status code"):
+        assert response.status_code == 200
+
+    with allure.step("Validate the response message"):
+        assert response.json['message'] == "Connected to database mydb!"
 
 
+@allure.feature("API Tests")
+@allure.story("Add Record Endpoint")
 def test_add_record(client):
-    response = client.post('/add', json={"name": "TestUser", "age": 30})
-    assert response.status_code == 201
-    assert "id" in response.json
+    with allure.step("Send POST request to '/add' endpoint with test data"):
+        response = client.post('/add', json={"name": "TestUser", "age": 30})
+
+    with allure.step("Check the status code"):
+        assert response.status_code == 201
+
+    with allure.step("Validate the response contains an ID"):
+        assert "id" in response.json
