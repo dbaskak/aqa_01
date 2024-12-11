@@ -67,7 +67,7 @@ pipeline {
             emailext (
                 subject: 'Pipeline completed: ${currentBuild.fullDisplayName}',
                 body: 'Pipeline finished with status: ${currentBuild.result}',
-                to: 'dbaskak@gmail.com'
+                to: 'dbaskak@gmail.com',
                 attachLog: true
             )
         }
@@ -76,7 +76,7 @@ pipeline {
             emailext (
                 subject: 'Pipeline SUCCESS: ${currentBuild.fullDisplayName}',
                 body: 'The pipeline completed successfully.',
-                to: 'dbaskak@gmail.com'
+                to: 'dbaskak@gmail.com',
                 attachLog: true
             )
         }
@@ -85,7 +85,7 @@ pipeline {
             emailext (
                 subject: 'Pipeline FAILED: ${currentBuild.fullDisplayName}',
                 body: 'The pipeline failed. Please check the logs.',
-                to: 'dbaskak@gmail.com'
+                to: 'dbaskak@gmail.com',
                 attachLog: true
             )
         }
