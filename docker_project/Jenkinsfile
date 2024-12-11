@@ -17,8 +17,8 @@ pipeline {
             steps {
                 echo 'Setting up Python environment...'
                 sh '''
-                sudo apt-get update
-                sudo apt-get install -y libpq-dev gcc
+                apt-get update
+                apt-get install -y libpq-dev gcc
                 python3 -m venv ${VENV_DIR}
                 source ${VENV_DIR}/bin/activate
                 pip install --upgrade pip
@@ -31,7 +31,7 @@ pipeline {
             steps {
                 echo 'Running tests...'
                 sh '''
-                source ${VENV_DIR}/bin/activate
+                . ${VENV_DIR}/bin/activate
                 pytest --alluredir=allure-results
                 '''
             }
@@ -49,6 +49,17 @@ pipeline {
                 ])
             }
         }
+        stage('Verify Test Results') {
+    steps {
+        echo 'Checking allure-results directory...'
+        sh '''
+        if [ ! -d allure-results ] || [ -z "$(ls -A allure-results)" ]; then
+            echo "No test results found in allure-results!"
+            exit 1
+        fi
+        '''
+    }
+}
     }
 
     post {
@@ -57,6 +68,7 @@ pipeline {
                 subject: 'Pipeline completed: ${currentBuild.fullDisplayName}',
                 body: 'Pipeline finished with status: ${currentBuild.result}',
                 to: 'dbaskak@gmail.com'
+                attachLog: true
             )
         }
 
@@ -65,6 +77,7 @@ pipeline {
                 subject: 'Pipeline SUCCESS: ${currentBuild.fullDisplayName}',
                 body: 'The pipeline completed successfully.',
                 to: 'dbaskak@gmail.com'
+                attachLog: true
             )
         }
 
@@ -73,6 +86,7 @@ pipeline {
                 subject: 'Pipeline FAILED: ${currentBuild.fullDisplayName}',
                 body: 'The pipeline failed. Please check the logs.',
                 to: 'dbaskak@gmail.com'
+                attachLog: true
             )
         }
     }
