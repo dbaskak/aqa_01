@@ -27,3 +27,37 @@ pipeline {
                     '''
                 }
             }
+        }
+        stage('Run Tests') {
+            steps {
+                echo 'Running tests in docker_project...'
+                dir('docker_project') {
+                    sh '''
+                    source venv/bin/activate
+                    pytest --alluredir=allure-results
+                    '''
+                }
+            }
+        }
+        stage('Publish Test Results') {
+            steps {
+                echo 'Publishing test results...'
+                dir('docker_project') {
+                    sh '''
+                    allure generate allure-results -o allure-report --clean
+                    '''
+                }
+            }
+        }
+    }
+    post {
+        always {
+            echo 'Pipeline completed.'
+            emailext(
+                subject: "Pipeline Result: ${currentBuild.currentResult}",
+                body: "Pipeline '${env.JOB_NAME}' completed with status: ${currentBuild.currentResult}.",
+                to: 'dbaskak@gmail.com'
+            )
+        }
+    }
+}
