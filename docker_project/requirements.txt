@@ -5,3 +5,4 @@ Werkzeug==2.2.2
 pytest-flask==1.2.0
 allure-pytest==2.13.5
 selenium==4.14.0
+webdriver-manager==4.2.0
