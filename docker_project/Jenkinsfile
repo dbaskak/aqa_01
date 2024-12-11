@@ -50,13 +50,13 @@ pipeline {
     }
 
     post {
-    always {
-        emailext (
-            subject: 'Pipeline completed: ${currentBuild.fullDisplayName}',
-            body: 'Pipeline finished with status: ${currentBuild.result}',
-            to: 'dbaskak@gmail.com'
-        )
-    }
+        always {
+            emailext (
+                subject: 'Pipeline completed: ${currentBuild.fullDisplayName}',
+                body: 'Pipeline finished with status: ${currentBuild.result}',
+                to: 'dbaskak@gmail.com'
+            )
+        }
 
         success {
             emailext (
