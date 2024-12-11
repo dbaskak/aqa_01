@@ -1,24 +1,19 @@
 pipeline {
     agent any
-
     environment {
-        VENV_DIR = 'venv' //
+        VENV_DIR = 'venv'
     }
-
     stages {
         stage('Checkout Code') {
             steps {
                 echo 'Cloning repository...'
-                git branch: 'main', url: 'https://github.com/dbaskak/aqa_01.git'
+                checkout scm
             }
         }
-
         stage('Setup Environment') {
             steps {
                 echo 'Setting up Python environment...'
                 sh '''
-                apt-get update
-                apt-get install -y libpq-dev gcc
                 python3 -m venv ${VENV_DIR}
                 source ${VENV_DIR}/bin/activate
                 pip install --upgrade pip
@@ -26,66 +21,40 @@ pipeline {
                 '''
             }
         }
-
         stage('Run Tests') {
             steps {
                 echo 'Running tests...'
                 sh '''
-                . ${VENV_DIR}/bin/activate
+                source ${VENV_DIR}/bin/activate
                 pytest --alluredir=allure-results
                 '''
             }
         }
-
         stage('Publish Test Results') {
             steps {
                 echo 'Publishing test results...'
-                allure([
-                    includeProperties: false,
-                    jdk: '',
-                    properties: [],
-                    reportBuildPolicy: 'ALWAYS',
-                    results: [[path: 'allure-results']]
-                ])
+                allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
             }
         }
         stage('Verify Test Results') {
-    steps {
-        echo 'Checking allure-results directory...'
-        sh '''
-        if [ ! -d allure-results ] || [ -z "$(ls -A allure-results)" ]; then
-            echo "No test results found in allure-results!"
-            exit 1
-        fi
-        '''
+            steps {
+                echo 'Verifying test results...'
+                sh '''
+                if [ ! -s allure-results ]; then
+                    echo "No test results found!"
+                    exit 1
+                fi
+                '''
+            }
+        }
     }
-}
-    }
-
     post {
         always {
-            emailext (
-                subject: 'Pipeline completed: ${currentBuild.fullDisplayName}',
-                body: 'Pipeline finished with status: ${currentBuild.result}',
+            echo 'Pipeline completed.'
+            emailext(
                 to: 'dbaskak@gmail.com',
-                attachLog: true
-            )
-        }
-
-        success {
-            emailext (
-                subject: 'Pipeline SUCCESS: ${currentBuild.fullDisplayName}',
-                body: 'The pipeline completed successfully.',
-                to: 'dbaskak@gmail.com',
-                attachLog: true
-            )
-        }
-
-        failure {
-            emailext (
-                subject: 'Pipeline FAILED: ${currentBuild.fullDisplayName}',
-                body: 'The pipeline failed. Please check the logs.',
-                to: 'dbaskak@gmail.com',
+                subject: "Build ${currentBuild.fullDisplayName}",
+                body: "Build finished with status: ${currentBuild.result}",
                 attachLog: true
             )
         }
