@@ -1,52 +1,44 @@
 pipeline {
     agent any
-
     environment {
-        VENV_DIR = "venv"
+        VENV_DIR = 'venv'
+        PYTHONPATH = "${WORKSPACE}/docker_project"
     }
-
-    options {
-        skipDefaultCheckout true
-    }
-
     stages {
         stage('Checkout Code') {
             steps {
                 echo 'Cloning repository for branch homework_31...'
-                checkout([
+                checkout scm: [
                     $class: 'GitSCM',
                     branches: [[name: '*/homework_31']],
                     userRemoteConfigs: [[url: 'https://github.com/dbaskak/aqa_01.git']]
-                ])
+                ]
             }
         }
-
         stage('Setup Environment') {
             steps {
                 echo 'Setting up Python environment...'
                 dir('docker_project') {
                     sh '''
-                    python3 -m venv ${VENV_DIR}
-                    source ${VENV_DIR}/bin/activate
+                    python3 -m venv venv
+                    source venv/bin/activate
                     pip install --upgrade pip
                     pip install -r requirements.txt
                     '''
                 }
             }
         }
-
         stage('Run Tests') {
             steps {
                 echo 'Running tests in docker_project...'
                 dir('docker_project') {
                     sh '''
-                    source ${VENV_DIR}/bin/activate
+                    source venv/bin/activate
                     pytest --alluredir=allure-results
                     '''
                 }
             }
         }
-
         stage('Publish Test Results') {
             steps {
                 echo 'Publishing test results...'
@@ -55,65 +47,28 @@ pipeline {
                     allure generate allure-results -o allure-report --clean
                     '''
                 }
-                publishHTML([
-                    allowMissing: false,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: 'docker_project/allure-report',
-                    reportFiles: 'index.html',
-                    reportName: 'Allure Test Report'
-                ])
             }
         }
-
         stage('Verify Test Results') {
             steps {
                 echo 'Verifying test results...'
                 dir('docker_project') {
                     script {
-                        def testResults = readFile('allure-results/summary.json')
-                        def failed = testResults.contains('"status": "failed"')
-                        if (failed) {
-                            error("There are failed tests.")
-                        } else {
-                            echo "All tests passed."
+                        def allureReportPath = 'allure-report'
+                        if (!fileExists(allureReportPath)) {
+                            error("Allure report not generated!")
                         }
                     }
                 }
             }
         }
     }
-
     post {
         always {
             echo 'Pipeline completed.'
-        }
-        success {
-            emailext (
-                subject: "Jenkins Build Successful: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: """
-                The Jenkins build for job ${env.JOB_NAME} #${env.BUILD_NUMBER} was successful.
-
-                You can view the build at: ${env.BUILD_URL}
-
-                Regards,
-                Jenkins
-                """,
-                recipientProviders: [[$class: 'DevelopersRecipientProvider']],
-                to: 'dbaskak@gmail.com'
-            )
-        }
-        failure {
-            emailext (
-                subject: "Jenkins Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: """
-                The Jenkins build for job ${env.JOB_NAME} #${env.BUILD_NUMBER} failed.
-
-                You can view the build at: ${env.BUILD_URL}
-
-                Regards,
-                Jenkins
-                """,
+            emailext(
+                subject: "Pipeline Result: ${currentBuild.currentResult}",
+                body: "Pipeline '${env.JOB_NAME}' completed with status: ${currentBuild.currentResult}.",
                 recipientProviders: [[$class: 'DevelopersRecipientProvider']],
                 to: 'dbaskak@gmail.com'
             )
