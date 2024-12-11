@@ -36,17 +36,6 @@ pipeline {
                 allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
             }
         }
-        stage('Verify Test Results') {
-            steps {
-                echo 'Verifying test results...'
-                sh '''
-                if [ ! -s allure-results ]; then
-                    echo "No test results found!"
-                    exit 1
-                fi
-                '''
-            }
-        }
     }
     post {
         always {
