@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+    stages {
+        stage('Checkout Code') {
+            steps {
+                checkout scm
+            }
+        }
+        stage('Install Dependencies') {
+            steps {
+                sh 'pip install -r requirements.txt'
+            }
+        }
+        stage('Run Tests') {
+            steps {
+                sh 'pytest --junitxml=results.xml'
+            }
+        }
+        stage('Publish Test Results') {
+            steps {
+                junit 'results.xml'
+            }
+        }
+    }
+    post {
+        always {
+            emailext (
+                to: "dbaskak@gmail.com",
+                subject: "Jenkins Pipeline Results: ${currentBuild.fullDisplayName}",
+                body: """<p>Pipeline Result: ${currentBuild.result}</p>
+                          <p>Details: ${env.BUILD_URL}</p>""",
+                mimeType: 'text/html'
+            )
+        }
+    }
+}
