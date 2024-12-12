@@ -10,7 +10,7 @@ pipeline {
         }
         stage('Install Dependencies') {
             steps {
-                sh 'python3 -m pip install --no-cache-dir -r minimal_jenkins/requirements.txt'
+                sh 'pip install --no-cache-dir -r minimal_jenkins/requirements.txt'
             }
         }
         stage('Run Tests') {
