@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        docker { image 'python:3.9-slim' }
+    }
     stages {
         stage('Checkout Code') {
             steps {
@@ -8,19 +10,12 @@ pipeline {
         }
         stage('Install Dependencies') {
             steps {
-                sh 'pip3 install --no-cache-dir -r minimal_jenkins/requirements.txt'
+                sh 'python -m pip install --no-cache-dir -r minimal_jenkins/requirements.txt'
             }
         }
         stage('Run Tests') {
             steps {
-                sh 'pytest --junitxml=results.xml'
-            }
-        }
-        stage('Debug Environment') {
-            steps {
-                sh 'python3 --version || echo "Python not found"'
-                sh 'pip3 --version || echo "Pip not found"'
-                sh 'env'
+                sh 'python -m pytest --junitxml=results.xml'
             }
         }
         stage('Publish Test Results') {
