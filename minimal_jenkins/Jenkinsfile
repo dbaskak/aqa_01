@@ -13,7 +13,7 @@ pipeline {
         }
         stage('Run Tests') {
             steps {
-                sh 'python3 -m pytest --junitxml=results.xml'
+                sh 'python3 -m pytest minimal_jenkins/tests --junitxml=results.xml'
             }
         }
         stage('Publish Test Results') {
