@@ -23,18 +23,19 @@ pipeline {
         }
     }
     post {
-    always {
-        script {
-            try {
-                emailext (
-                    to: 'dbaskak@gmail.com',
-                    subject: "Jenkins Pipeline Results: ${currentBuild.fullDisplayName}",
-                    body: """<p>Pipeline Result: ${currentBuild.result}</p>
-                             <p>Details: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>""",
-                    mimeType: 'text/html'
-                )
-            } catch (e) {
-                echo "Email sending failed: ${e}"
+        always {
+            script {
+                try {
+                    emailext (
+                        to: 'dbaskak@gmail.com',
+                        subject: "Jenkins Pipeline Results: ${currentBuild.fullDisplayName}",
+                        body: """<p>Pipeline Result: ${currentBuild.result}</p>
+                                 <p>Details: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>""",
+                        mimeType: 'text/html'
+                    )
+                } catch (e) {
+                    echo "Email sending failed: ${e}"
+                }
             }
         }
     }
