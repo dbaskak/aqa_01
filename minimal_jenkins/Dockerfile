@@ -5,4 +5,4 @@ COPY minimal_jenkins/requirements.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 COPY minimal_jenkins/ .
 
-CMD ["pytest", "--alluredir=allure-results", "tests"]
+CMD ["pytest", "tests"]
